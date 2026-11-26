@@ -1,0 +1,983 @@
+# Topic here covered ----
+
+#                  1. multithreading
+#                  2. Synchronization
+#                  3. Inter Thread Communication
+
+
+
+
+# ==================================================================================================================
+# ----------------------------------
+# Multitasking  -- executing multiple task simultaneously
+# 1. process based multitasking
+# 2. Thread based multitasking
+
+
+
+
+# 1. process based multitasking -- each task is independent process
+#   eg.  - code editor and music player in background
+# best suitable in os level
+
+
+# 2. Thread based multitasking -- executing several task simultaneously where each task is a separate independent part of same program
+# and each independent part is called thread
+
+
+# Thread : -- flow of execution, single flow of execution
+# Multi thread :-- Multiple flow of execution of program
+
+
+import threading
+print("current thread:",threading.current_thread().getName())
+
+
+#  -------------------------------------------------------------------------------------------------------------
+# the ways of creating thread in python
+#
+# 1. creating a thread without using any class
+# 2. creating a thread clas by extending thread class
+# 3. creating a thread without extending thread class
+
+
+
+import logging
+import queue
+import random
+import threading
+from threading import *
+import time
+
+
+# -------------------------------------------------------
+# 1. creating a thread without using any class
+
+#  use current_thread().name instead  of current_thread().getName() because it is old version
+
+def display():
+    print("this code executed by thread:",threading.current_thread().name)  # MainThread
+
+print("this code executed by thread:",threading.current_thread().name)   # MainThread
+t=Thread(target=display)
+print("this code executed by thread:", threading.current_thread().name)   # MainThread
+
+
+
+def display():
+    print("this code executed by thread:",threading.current_thread().name)  # MainThread
+
+t=Thread(target=display)
+t.start() # mainthread start child thread
+print("this code executed by thread:", threading.current_thread().name)   # ChildThread
+
+
+
+# --------------------------------------------------------------
+# we cant get the order of the program execution because og multi threading
+def display():
+    for i in range(10):
+        print("child thread .")
+
+t=Thread(target=display) # create child thread
+t.start() # mainthread start child thread
+
+for i in range(10):
+    print("main thread...")
+
+
+
+# -------------------------------------------------------------------------
+# 2. creating a thread clas by extending thread class
+
+class MyThread(Thread):
+    def run(self): # self - current object  /  run() - override method
+        for i in range(10):
+            print("Child class..1")
+
+t=MyThread()
+t.start()
+for i in range(10):
+    print("Main thread class...")
+
+
+
+
+# ------------------------------------------------------------
+# 3. creating a thread without extending thread class
+
+class Test:
+    def display(self):
+        for i in range(10):
+            print("Child class..1")
+
+obj=Test()
+t=Thread(target=obj.display)
+t.start()
+for i in range(10):
+    print("Main thread .....")
+
+
+
+
+
+class Test:
+    def display(self):
+        for i in range(10):
+            print("child thread executed by:",threading.current_thread().name)
+
+obj=Test()
+t=Thread(target=obj.display)
+t1=Thread(target=obj.display)
+t2=Thread(target=obj.display)
+
+t.start()
+t1.start()
+t2.start()
+
+
+
+
+
+
+# ------------------------------------------------------------------------------------------------
+# comparing simple code to multithreading
+
+
+def doubles(numbers):
+    for n in numbers:
+        time.sleep(1)
+        print(f'Double of {n} :',n*2)
+
+def squares(numbers):
+    for n in numbers:
+        time.sleep(1)
+        print(f"Square on {n} :",n*n)
+
+numbers=[1,2,3,4,5,6]
+begin_time=time.time()
+doubles(numbers)
+squares(numbers)
+end_time=time.time()
+
+print("total time taken:",end_time-begin_time)
+
+
+
+
+
+
+def doubles(numbers):
+    for n in numbers:
+        time.sleep(1)
+        print(f'Double of {n} :',n*2)
+
+def squares(numbers):
+    for n in numbers:
+        time.sleep(1)
+        print(f"Square on {n} :",n*n)
+
+numbers=[1,2,3,4,5,6]
+begin_time=time.time()
+t1=Thread(target=doubles,args=(numbers,))
+t2=Thread(target=squares,args=(numbers,))
+t1.start()
+t2.start()
+
+t1.join()
+t2.join()
+
+end_time=time.time()
+print("total time taken:",end_time-begin_time)
+
+
+
+
+
+
+
+#-----------------------------------------------------------------------
+# to get and set thread name
+
+# name  -- for get
+# set name --- name='jay'
+
+
+print(current_thread().name)
+# print(current_thread().setName('jay thread')) # old version
+t = current_thread()
+t.name = "jay thread"
+print(t.name)
+
+
+
+
+
+
+#--------------------------------------------------------------------
+# ident -- for get the thread number
+
+def display():
+    print("child thread",current_thread().ident)
+t=Thread(target=display)
+t.start()
+print("main thread:",current_thread().ident)
+print("child thread:",t.ident)
+
+
+
+#---------------------------------------------------------------------------
+# active_count() -- for get the current active thread
+
+def display():
+    print(current_thread().name,'started.')
+    time.sleep(1)
+    print(current_thread().name,'ended..')
+print('The number of active thread:',active_count())  #1
+t1=Thread(target=display,name='child thread 1')
+t2=Thread(target=display,name='child thread 2')
+t3=Thread(target=display,name='child thread 3')
+
+t1.start()
+t2.start()
+t3.start()
+
+print("The number of active thread:",active_count())  #4
+time.sleep(5)
+print("The number of active thread:",active_count())  #1
+
+
+
+
+#---------------------------------------------------------------------------
+# enumerate() -- for get all the active thread information
+
+def display():
+    print(current_thread().name,'started.')
+    time.sleep(1)
+    print(current_thread().name,'ended..')
+print('The number of active thread:',active_count())  #1
+t1=Thread(target=display,name='child thread 1')
+t2=Thread(target=display,name='child thread 2')
+t3=Thread(target=display,name='child thread 3')
+
+t1.start()
+t2.start()
+t3.start()
+
+l=enumerate()
+for i in l:
+    print('Name:',i.name)
+time.sleep(5)
+print("after 5 second sleeping..")
+
+l=enumerate()
+for i in l:
+    print('Name:',i.name)
+
+
+
+
+
+#--------------------------------------------------------------------------------
+
+# is_alive() -- for check the thread is executing or not
+
+def display():
+    print(current_thread().name,'started.')
+    time.sleep(1)
+    print(current_thread().name,'ended..')
+print('The number of active thread:',active_count())  #1
+t1=Thread(target=display,name='child thread 1')
+t2=Thread(target=display,name='child thread 2')
+t3=Thread(target=display,name='child thread 3')
+
+t1.start()
+t2.start()
+t3.start()
+
+print(t1.name,'is Alive :',t1.is_alive())
+print(t2.name,'is Alive :',t1.is_alive())
+print(t3.name,'is Alive :',t1.is_alive())
+time.sleep(5)
+print(t1.name,'is Alive :',t1.is_alive())
+print(t2.name,'is Alive :',t1.is_alive())
+print(t3.name,'is Alive :',t1.is_alive())
+print(current_thread().name,'-  is alive: ',current_thread().is_alive())
+
+
+
+
+
+#---------------------------------------------------------------------------------
+
+# join() -- if a thread wants to wait until completing some other  thread
+#            then we go for join()
+
+
+def display():
+    for i in range(10):
+        print("Anju Thread.")
+        time.sleep(1)
+
+t=Thread(target=display)
+t.start()
+t.join()
+for i in range(10):
+    print("Jay thread.")
+
+
+# join() with timeout
+def display():
+    for i in range(10):
+        print("Anju Thread.")
+        time.sleep(1)
+
+t=Thread(target=display)
+t.start()
+t.join(5)               # wait only 5 seconds
+for i in range(10):
+    print("Jay thread.")
+
+
+# ==================================================================================================================
+
+#------------------------------------------------------------------------
+# Daemon Thread -- The thread which are running in the
+#                  background are called Daemon thread
+
+# daemon  ---     to check the thread is daemon or not
+# daemon=False
+# daemon=True
+
+
+print(current_thread().name)
+print(current_thread().daemon)
+print()
+
+
+def job():
+    print("child thread")
+
+t=Thread(target=job)
+print(t.daemon)    # False
+
+t.daemon=True
+print(t.daemon)  # True
+
+
+
+
+
+
+def job():
+    for i in range(10):
+        print("Lazy thread")
+        time.sleep(1)
+
+t=Thread(target=job)
+
+t.start()
+time.sleep(5)
+print("End of the main thread")
+
+
+
+def job():
+    for i in range(10):
+        print("Lazy thread")
+        time.sleep(1)
+
+t=Thread(target=job)
+t.daemon=True # daemon thread , now child thread will run in background ,and terminate after 5 second
+t.start()
+time.sleep(5)
+print("End of the main thread")
+
+
+
+
+
+
+def job1():
+    print("job1 execution..")
+    print(current_thread().name,'is daemon:',current_thread().daemon)
+    ct=Thread(target=job2(),name='childThread2')
+    # ct.daemon=False
+    print('ct 2 is daemon:',ct.daemon)
+
+def job2():
+    print("job2 execution..")
+
+t=Thread(target=job1,name='childThread')
+# t.start()
+t.daemon=True
+t.start()
+time.sleep(5)
+
+
+
+
+
+
+
+
+
+
+# ==================================================================================================================
+
+# Synchronization  -- the thread will be executed one by one
+#                     so that we can overcome data inconsistency problem
+# Synchronization means at a time only one thread executed
+#
+# here are three ways ---
+#                        1  Lock
+#                        2. RLock
+#                        3. Semaphore
+
+
+
+
+
+
+
+def wish(name):
+    for i in range(5):
+        print("good evening:",end='')
+        time.sleep(3)
+        print(name)
+t1=Thread(target=wish,args=("Jay",))
+t2=Thread(target=wish,args=("Anju",))
+t1.start()   # to overcome this problem we should go for synchronization
+# t1.join()  # we can also use that
+t2.start()
+
+
+
+# if there is huge code then we can not need to use join() , use synchronization
+
+# --------------------------------------------------------------------------------------------
+#   1  Lock    -- lock object can be hold by only one thread
+
+# l=Lock()  -- for locking
+# l.acquire()  # 1
+# l.release()
+
+l=Lock()
+def wish(name):
+    l.acquire()
+    for i in range(5):
+        print("good evening:",end='')
+        time.sleep(1)
+        print(name)
+    l.release()                    # we always have to release the lock
+t1=Thread(target=wish,args=("Jay",))
+t2=Thread(target=wish,args=("Anju",))
+t3=Thread(target=wish,args=("shivani",))
+t4=Thread(target=wish,args=("jay kesh",))
+t1.start()
+t2.start()
+t3.start()
+t4.start()
+
+time.sleep(7)
+print("main thread will not require  lock")
+print(t1.is_alive())  # False
+
+
+
+
+l=Lock()
+print('main thread acquiring the lock')
+l.acquire()
+print('main thread releasing the lock')
+# l.release()
+
+l.acquire()
+print('main thread acquiring same lock again')
+
+
+# in the above program main thread is not available so program goes to dead, block
+
+
+
+
+
+
+# --------------------------------------------------------------------------------------------
+#   2. RLock  ( Re enterant lock ) -- ( it is mostly used in nested / recursion function) means thread can acquire the same thread again and again
+
+
+l=RLock()
+print('main thread acquiring the lock')
+l.acquire()
+print('main thread releasing the lock')
+#l.release()
+
+l.acquire()
+print('main thread acquiring same lock again')
+
+
+
+
+rl=RLock()
+def factorial(n):
+    rl.acquire()
+    if n==0:
+        result=1
+    else:
+        result=n*factorial(n-1)
+    rl.release()
+    return result
+
+def results(n):
+    print(f"The factorial of {n} is: ",factorial(n))
+
+t1=Thread(target=results,args=(5,))
+t2=Thread(target=results,args=(9,))
+t1.start()
+t2.start()
+
+
+
+
+
+
+
+
+
+
+# --------------------------------------------------------------------------------------------
+#   3. Semaphore -- to handle , requirements like , at a time a particular number of thread are allowed to execute
+#                  to handle fixed number of thread
+
+# the default semaphore value is : 1
+
+
+
+s=Semaphore(2)         # taking 2 thread at a time
+def wish(name):
+    s.acquire()
+    for i in range(5):
+        print("good evening:",end='')
+        time.sleep(1)
+        print(name)
+    s.release()
+t1=Thread(target=wish,args=("Jay",))
+t2=Thread(target=wish,args=("Anju",))
+t3=Thread(target=wish,args=("shivani",))
+t4=Thread(target=wish,args=("jay kesh",))
+t1.start()
+t2.start()
+t3.start()
+t4.start()
+
+
+
+# -------------------------------------------------------
+# BoundedSemaphore() --- release calls should not exceed the number of acquire
+
+#s=Semaphore()
+s=Semaphore(2)
+s.acquire()
+print("main thread trying to acquire again..")
+s.acquire()
+print('Done')
+
+
+s=Semaphore(2)  # here it is continue
+s.acquire()
+s.acquire()
+s.release()
+s.release()
+s.release()
+s.release()
+s.release()
+
+
+s=BoundedSemaphore(2)  # here it generates the error
+s.acquire()
+s.acquire()
+s.release()
+s.release()
+s.release()
+
+
+
+
+
+
+
+
+# ==================================================================================================================
+
+# Inter Thread Communication -- some time thread are required to communicate each other
+#                                this concept is called inter thread communication
+#
+# ways of Inter Thread Communication ---
+#                 1. Event()
+#                 2. Condition()
+#                 1. Queue()
+
+
+
+# -------------------------------------------------------------------------------------
+# Inter Thread Communication by using Event() --
+
+# event= Event()
+# Event manages an internal flag that can set() or clear()
+
+# ----------------------------------------------
+# 1. set() -- internal flag value will become True , for all waiting thread
+# 2. clear() --- internal flag value will become False , for all waiting thread
+
+# 3. is_Set() -- to check weather set or not
+# 4. wait() or wait(time) -- thread can wait until event is set
+
+
+e=Event()
+def consumer():
+    print("Consumer thread waiting for update..")
+    e.wait()
+    print("Consumer thread got notification")
+def producer():
+    time.sleep(2)
+    print("producer thread producing items..")
+    print("producer thread giving notification")
+    e.set()
+
+t1=Thread(target=producer)
+t2=Thread(target=consumer)
+t1.start()
+t2.start()
+
+
+
+
+
+
+
+e=Event()
+
+def traffic_police():
+    while True:
+        time.sleep(5)
+        print("Traffic police giving green signal")
+        e.set()
+        time.sleep(10)
+        print("Traffic police giving red signal.")
+        e.clear()
+
+def driver():
+    num=0
+    while True:
+        print("Drivers waiting for green signals")
+        e.wait()
+        print("Traffic signal is Green Vehicles can move")
+        while e.is_set():
+            num=num+1
+            print("Vehicle Number:",num,'Crossing the signal')
+            time.sleep(1)
+        print("Traffic signal is red ... Driver have to wait.")
+
+t1=Thread(target=traffic_police)
+t2=Thread(target=driver)
+t1.start()
+t2.start()
+
+
+
+
+
+
+e=Event()
+
+def traffic_police():
+    for i in range(2):
+        time.sleep(5)
+        print("Traffic police giving green signal")
+        e.set()
+        time.sleep(10)
+        print("Traffic police giving red signal.")
+        e.clear()
+
+def driver():
+    num=0
+    for i in range(2):
+        print("Drivers waiting for green signals")
+        e.wait()
+        print("Traffic signal is Green Vehicles can move")
+        while e.is_set():
+            num=num+1
+            print("Vehicle Number:",num,'Crossing the signal')
+            time.sleep(1)
+        print("Traffic signal is red ... Driver have to wait.")
+
+t1=Thread(target=traffic_police)
+t2=Thread(target=driver)
+t1.start()
+t2.start()
+
+
+
+
+
+
+
+# # -------------------------------------------------------------------------------------
+# Inter Tread Communication by using Condition Object --
+#
+# some kind of state changes
+# condition obj associated with RLock()
+
+# 1. acquire() -
+# 2. release() -
+# 3. wait()   -  Thread will enter to waiting state
+# 4. notify() - to give notification for one waiting thread
+# 5. notifyAll() -to give notification for all waiting thread
+
+
+
+def consume(c):
+    c.acquire()
+    print("consumer waiting for updation.")
+    c.wait() # now thread will entered into waiting state
+    print("consumer got the notification and consuming the item")
+    c.release()
+
+def produce(c):
+    c.acquire()
+    print("producer producing the item..")
+    print("producer giving the notification..")
+    c.notify()
+    c.release()
+
+
+c=Condition()
+t1=Thread(target=consume,args=(c,))
+t2=Thread(target=produce,args=(c,))
+t1.start()
+t2.start()
+
+
+
+
+
+import random
+
+items=[]
+
+def consume(c):
+    # while True:
+    for i in range(5):
+       c.acquire()
+       print("consumer waiting for updation.")
+       c.wait() # now thread will entered into waiting state
+       print("consumer consume the  item",items.pop())
+       c.release()
+       time.sleep(5)
+
+def produce(c):
+    # while True:
+    for i in range(5):
+       c.acquire()
+       item=random.randint(1,100)
+       print("producer producing the item..",item)
+       items.append(item)
+       print("producer giving the notification..")
+       c.notify()
+       c.release()
+       time.sleep(5)
+
+c=Condition()
+t1=Thread(target=consume,args=(c,))
+t2=Thread(target=produce,args=(c,))
+t1.start()
+t2.start()
+
+
+
+
+
+
+# -------------------------------------------------------------------------------------
+
+# 3.  Inter Thread communication by using Queue    ----
+#
+import queue
+# q=queue.Queue
+
+#           put() -- to add item in queue
+#           get() -- remove and return item from queue
+
+
+
+import queue
+
+def produce(q):
+    # while True:
+    for i in range(5):
+        item=random.randint(1,100)
+        print("producer producing items:",item)
+        q.put(item)
+        print("producer giving notification.")
+        time.sleep(5)
+
+
+def consume(q):
+    # while True:
+    for i in range(5):
+        print("consumer waiting for updation..")
+        print("consumer consuming the item:",q.get())
+        time.sleep(5)
+
+q=queue.Queue()
+
+t1=Thread(target=consume,args=(q,))
+t2=Thread(target=produce,args=(q,))
+t1.start()
+t2.start()
+
+
+
+
+
+
+
+
+# ----------------------------------------------------------------------
+# python supports 3 types queue
+
+# 1. FIFO Queue
+# 2. LIFO Queue
+# 3. Priority Queue
+
+
+# ----------------------------------------------------------------
+# 1. FIFO Queue  --  it is default queue
+
+q=queue.Queue()
+q.put(1)
+q.put(3)
+q.put(10)
+q.put(50)
+q.put(40)
+q.put(0)
+while not q.empty():
+    print(q.get(),end=' ')
+print()
+
+
+# ----------------------------------------------------------------
+# 2. LIFO Queue
+
+q=queue.LifoQueue()
+q.put(1)
+q.put(3)
+q.put(10)
+q.put(50)
+q.put(40)
+q.put(0)
+while not q.empty():
+    print(q.get(),end=' ')
+
+
+
+
+# ----------------------------------------------------------------
+# 3. Priority Queue  -- elements inserted based on some priority order
+
+print()
+q=queue.PriorityQueue()
+q.put(1)
+q.put(3)
+q.put(10)
+q.put(50)
+q.put(40)
+q.put(0)
+while not q.empty():
+    print(q.get(),end=' ')
+
+
+
+print()
+q=queue.PriorityQueue()
+q.put((1,"jay"))
+q.put((3,"ravi"))
+q.put((10,"bhanu"))
+q.put((50,"singh"))
+
+while not q.empty():
+    print(q.get()[1],end=' ')
+
+
+
+
+
+# ------------------------------------------------------------------------------------------------------------------
+# good programming practice with usage of lock
+
+# l.acquire()
+# l.release() ---
+
+
+#--------------------------------------------
+#highly re commanded to use with try and finally block
+
+
+l=threading.Lock()
+l.acquire()
+try:
+#     performed requre safe operation
+      pass
+finally:
+    l.release()
+
+
+
+l=Lock()
+def wish(name):
+    l.acquire()
+    try:
+        for i in range(5):
+            print("good evening:",end='')
+            time.sleep(1)
+            print(name)
+    finally:
+        l.release()
+
+t1=Thread(target=wish,args=("jay",))
+t2=Thread(target=wish,args=("Anju",))
+t3=Thread(target=wish,args=("shivani",))
+
+t1.start()
+t2.start()
+t3.start()
+
+
+
+
+
+
+#--------------------------------------------
+# with keyword ---
+
+
+lock=Lock()
+def wish(name):
+    with lock:
+        for i in range(5):
+            print("good evening:",end='')
+            time.sleep(1)
+            print(name)
+
+t1=Thread(target=wish,args=("jay",))
+t2=Thread(target=wish,args=("Anju",))
+t3=Thread(target=wish,args=("shivani",))
+
+t1.start()
+t2.start()
+t3.start()
+
+
+

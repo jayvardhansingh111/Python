@@ -1,0 +1,125 @@
+# #  python is not supported for interface
+#
+# # interface -- it is a abstract class whis contain only abstract methods
+#
+#
+# from abc import *
+# class Interface(ABC):
+#     @abstractmethod
+#     def m1(self): pass
+#
+#     @abstractmethod
+#     def m2(self): pass
+#
+#     @abstractmethod
+#     def m3(self): pass
+#
+#     @abstractmethod
+#     def m4(self): pass
+#
+#
+#
+#
+#
+# # -------------------------------------------------------------
+# # concrete class -- if a class does not contain any abstract method
+#
+#
+# class Concrete:
+#     def m1(self):pass
+#     def m2(self):pass
+#     def m3(self):pass
+#
+#
+#
+#
+#
+#
+# # ---------------------------------------------------------------------
+# # example
+#
+# from abc import *
+# class DBIntrface(ABC):
+#     @abstractmethod
+#     def connect(self):pass
+#
+#     @abstractmethod
+#     def disconnect(self):pass
+#
+# class Oracle(DBIntrface):
+#     def connect(self):
+#         print('connecting to oracle database')
+#     def disconnect(self):
+#         print('disconnecting from oracle database')
+#
+#
+# class MySql(DBIntrface):
+#     def connect(self):
+#         print('connecting to mysql database')
+#     def disconnect(self):
+#         print('disconnecting from mysql database')
+#
+# o=Oracle()
+# o.connect()
+# o.disconnect()
+#
+# m=MySql()
+# m.connect()
+# m.disconnect()
+
+
+
+
+
+# --------------------------------
+
+
+from abc import *
+
+class Printer(ABC):
+    @abstractmethod
+    def print_it(self,text):pass
+
+    def disconnect(self):pass
+
+class EPSON(Printer):
+    def print_it(self,text):
+        print("Printing from EPSON printer")
+        print(text)
+
+    def disconnect(self):
+        print("Disconnecting from the EPSON printer")
+
+class HP(Printer):
+    def print_it(self,text):
+        print('Printing from HP printer')
+        print(text)
+
+    def disconnect(self):
+        print('Disconnecting from HP printer')
+
+with open('abc.txt','r') as f:
+    pname=f.readline()
+
+Classname=globals()[pname]
+
+x=Classname()
+x.print_it('this data')
+x.diconnect()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

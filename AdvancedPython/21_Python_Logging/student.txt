@@ -1,0 +1,13 @@
+INFO:root:info message from student module
+WARNING:root:warning message from 2_login module
+CRITICAL:root:critical message from 2_login module
+INFO:root:info message from 2_login module
+ERROR:root:error message from 2_login module
+13/07/2026 01:58:06 AM - demologger - INFO - Info message
+13/07/2026 01:58:06 AM - demologger - WARNING - Warning message
+13/07/2026 01:58:06 AM - demologger - ERROR - Error message
+13/07/2026 01:58:06 AM - demologger - CRITICAL - Critical message
+13/07/2026 02:00:38 AM - demologger - ERROR - Error message
+13/07/2026 02:00:38 AM - demologger - CRITICAL - Critical message
+13/07/2026 02:01:42 AM - demologger - ERROR - Error message
+13/07/2026 02:01:42 AM - demologger - CRITICAL - Critical message

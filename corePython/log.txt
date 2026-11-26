@@ -1,0 +1,76 @@
+WARNING:root:warning massage
+ERROR:root:error massage
+CRITICAL:root:critical massage
+WARNING:root:warning massage by default
+ERROR:root:error massage
+CRITICAL:root:critical massage
+WARNING:root:warning massage by default
+ERROR:root:error massage
+CRITICAL:root:critical massage
+DEBUG:root:debug massage by debug
+INFO:root:info massage
+WARNING:root:warning massage 
+ERROR:root:error massage
+CRITICAL:root:critical massage
+
+INFO:root:A new request came
+ERROR:root:division by zero
+Traceback (most recent call last):
+  File "D:\jayvardhan-space\py_charm\python_durgasir\19LoggingException.py", line 66, in <module>
+    print("The result is:",x/y)
+                           ~^~
+ZeroDivisionError: division by zero
+INFO:root:Request processing completed
+INFO:root:A new request came
+ERROR:root:invalid literal for int() with base 10: 'f'
+Traceback (most recent call last):
+  File "D:\jayvardhan-space\py_charm\python_durgasir\19LoggingException.py", line 65, in <module>
+    y=int(input("Enter second number:"))
+ValueError: invalid literal for int() with base 10: 'f'
+INFO:root:Request processing completed
+INFO:root:A new request came
+INFO:root:Request processing completed
+08/03/26 04:58:24 PM:INFO:A new request came
+08/03/26 04:58:29 PM:INFO:Request processing completed
+08/03/26 04:58:32 PM:INFO:A new request came
+08/03/26 04:58:35 PM:ERROR:invalid literal for int() with base 10: 'f'
+Traceback (most recent call last):
+  File "D:\jayvardhan-space\py_charm\python_durgasir\19LoggingException.py", line 87, in <module>
+    y = int(input("Enter second number: "))
+ValueError: invalid literal for int() with base 10: 'f'
+08/03/26 04:58:35 PM:INFO:Request processing completed
+08/03/26 04:58:41 PM:INFO:A new request came
+08/03/26 04:58:47 PM:ERROR:division by zero
+Traceback (most recent call last):
+  File "D:\jayvardhan-space\py_charm\python_durgasir\19LoggingException.py", line 88, in <module>
+    print("The result is:", x / y)
+                            ~~^~~
+ZeroDivisionError: division by zero
+08/03/26 04:58:47 PM:INFO:Request processing completed
+WARNING:root:warning massage
+ERROR:root:error massage
+CRITICAL:root:critical massage
+WARNING:root:warning massage by default
+ERROR:root:error massage
+CRITICAL:root:critical massage
+WARNING:root:warning massage 
+ERROR:root:error massage
+CRITICAL:root:critical massage
+WARNING:root:warning massage
+ERROR:root:error massage
+CRITICAL:root:critical massage
+WARNING:root:warning massage by default
+ERROR:root:error massage
+CRITICAL:root:critical massage
+WARNING:root:warning massage 
+ERROR:root:error massage
+CRITICAL:root:critical massage
+WARNING:root:warning massage
+ERROR:root:error massage
+CRITICAL:root:critical massage
+WARNING:root:warning massage by default
+ERROR:root:error massage
+CRITICAL:root:critical massage
+WARNING:root:warning massage 
+ERROR:root:error massage
+CRITICAL:root:critical massage

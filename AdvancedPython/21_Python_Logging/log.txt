@@ -1,0 +1,23 @@
+INFO:root:A new request came.
+INFO:root:Request processing completed
+INFO:root:A new request came.
+INFO:root:Request processing completed
+INFO:root:A new request came.
+ERROR:root:invalid literal for int() with base 10: 'ten'
+Traceback (most recent call last):
+  File "D:\jayvardhan-space\py_charm\python_durgasir\AdvancedPython\21_Python_Logging\1_Login.py", line 225, in <module>
+    x=int(input('Enter first number: '))
+ValueError: invalid literal for int() with base 10: 'ten'
+INFO:root:Request processing completed
+INFO:root:A new request came.
+INFO:root:Request processing completed
+INFO:root:A new request came.
+INFO:root:Request processing completed
+INFO:root:A new request came.
+ERROR:root:division by zero
+Traceback (most recent call last):
+  File "D:\jayvardhan-space\py_charm\python_durgasir\AdvancedPython\21_Python_Logging\1_Login.py", line 227, in <module>
+    print('Division is: ',x/y)
+                          ~^~
+ZeroDivisionError: division by zero
+INFO:root:Request processing completed
